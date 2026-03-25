@@ -30,6 +30,9 @@ def test_linked_list_pop():
 
     pop = ll.pop()
 
+    assert pop == 5
+    assert str(ll) == '[4, 3, 2]'
+
     ll_mix = LinkedList("1")
     ll_mix.append(2)
     ll_mix.append(4)
@@ -37,16 +40,34 @@ def test_linked_list_pop():
 
     pop_mix = ll_mix.pop()
 
-    assert pop == 5
-    assert ll.__str__() == '[4, 3, 2]'
     assert pop_mix == "b"
     assert ll_mix.__str__() == '[\'1\', 2, 4]'
 
+    ll = LinkedList(1)
+    val = ll.pop()
 
+    assert ll == 1
+    assert len(ll) == 0
+    assert ll.head == None
 
 
 def test_linked_list_prepend():
-    pass
+    ll = LinkedList(2)
+    ll.append(3)
+    ll.append(5)
+
+    ll.prepend(0)
+
+    assert ll.head.value == 0
+    assert len(ll) == 4
+
+    ll = LinkedList(1)
+    ll.pop()
+
+    ll.prepend(2)
+
+    assert ll.head.value == 2
+    assert len(ll) == 1
 
 
 def test_linked_list_pop_first():

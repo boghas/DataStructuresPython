@@ -53,6 +53,7 @@ class LinkedList:
             new_node = Node(item)
             self.head = new_node
             self.tail = new_node
+
         else:
             temp = self.tail
             temp.next = Node(item)
@@ -65,48 +66,61 @@ class LinkedList:
         
         Returns:
             (Any): The last item fromt the LinkedList.
-        
-        Raises:
-            (ValueError): If the LinkedList is empty.
         """
 
-        if not self.head:
-            raise ValueError("The LinkedList is empty!")
+        if self._length == 0:
+            return None
         
-        value = self.tail.value
-
         temp = self.head
-        while temp.next.next:
-            temp = temp.next
 
-        self.tail = temp
+        if self._length == 1:
+            self.head = None
+            self.tail = None
+
+            self._length -= 1
+
+            return temp.value
+        
+        curr = temp
+        prev = temp
+
+        while curr.next:
+            prev = curr
+            curr = curr.next
+        
+        self.tail = prev
         self.tail.next = None
 
-        self._length -= 1
+        return curr.value
 
-        return value
 
-    def prepend(self, item: Any):
+    def prepend(self, item: Any) -> bool:
         """Insert an item add the start of the LinkedList.
         
         Creates a new LinkedList if it is empty.
 
         Args:
             item (Any): The item to be inserted.
+        
+        Returns:
+            (bool): Returns True if the item is correctly inserted.
         """
+        new_node = Node(item)
 
-        if not self.head:
-            new_node = Node(item)
+        if not self.head or self._length == 0:
             self.head = new_node
             self.tail = new_node
             self._length += 1
+
+            return True
         
         temp = self.head
-        new_node = Node(item)
         new_node.next = temp
         self.head = new_node
 
         self._length += 1
+
+        return True
 
     def pop_first(self):
         """Return and remove from the LinkedList the first item.
@@ -117,16 +131,23 @@ class LinkedList:
         Raises:
             (ValueError): If the LinkedList is empty.
         """
-
-        if not self.head:
-            raise ValueError("The LinkedList is empty!")
+        if self._length == 0:
+            return None
         
         temp = self.head
-        self.head = temp.next
 
+        if self._length == 1:
+            self.head = None
+            self.tail = None
+            self._length -= 1
+            return temp
+        
+        self.head = self.head.next
         self._length -= 1
+        
+        temp.next = None
 
-        return temp.value
+        return temp
 
     def get(self, index: int):
         """Returns the item at the index position.
@@ -141,87 +162,93 @@ class LinkedList:
             (IndexError): If the index is negative or greater than the size of the LinkedList.    
         """
 
-        if index >= self._length or index < 0:
-            raise IndexError("LinkedList index out of range")
+        if index < 0 or index >= self._length:
+            return None
         
         temp = self.head
 
         for _ in range(index):
             temp = temp.next
         
-        return temp.value
+        return temp
 
     def set(self, index: int, item: Any):
         """"""
-        if index >= self._length or index < 0:
-            raise IndexError("LinkedList index out of range")
-        
-        temp = self.head
+        if index < 0 or index >= self._length:
+            return False
 
-        for _ in range(index - 1):
-            temp = temp.next
-        
-        new_node = Node(item)
-        new_node.next = temp.next.next
-        temp.next = new_node
+        node = self.get(index)
+        node.value = item
+
+        return True
         
     def insert(self, index: int, item: Any):
         """"""
-        if index >= self._length or index < 0:
-            raise IndexError("LinkedList index out of range")
+        if index == 0:
+            print("hhmmm2?")
+            return self.prepend(item)
         
-        temp = self.head
+        if index < 0 or index > self._length:
+            print("hm>")
+            return False
+        
+        if index == self._length:
+            return self.append(item)
+         
+        temp = self.get(index - 1)
+        print(f"teeemp: ", temp.value)
+        swap = Node(item)
+        swap.next = temp.next
+        temp.next = swap
+        self._length += 1
 
-        for _ in range(index - 1):
-            temp = temp.next
-        
-        new_node = Node(item)
-        new_node.next = temp.next
-        temp.next = new_node
+        return True
 
     def remove(self, index: int):
         """"""
-        if index >= self._length or index < 0:
-            raise IndexError("LinkedList index out of range")
+        if index < 0 or index >= self._length:
+            return None
         
         if index == 0:
-            self.pop_first()
-            return
+            return self.pop_first()
         
-        if index == self._length - 1:
-            self.pop()
-            return
+        if index == self._length:
+            return self.pop()
         
-        temp = self.head
+        node_to_be_removed = self.get(index)
+        previous_node = self.get(index - 1)
 
-        for _ in range(index - 1):
-            temp = temp.next
+        previous_node.next = node_to_be_removed.next
 
-        temp.next = temp.next.next
+        self._length -= 1
 
-    def reverse(self):
-        pass
-    
+        return node_to_be_removed
+
+
+
 if __name__ == "__main__":
-    ll = LinkedList(1)
+    
+    my_linked_list = LinkedList(1)
+    my_linked_list.append(2)
+    my_linked_list.append(3)
+    my_linked_list.append(4)
+    my_linked_list.append(5)
 
-    ll.append(2)
-    ll.append(3)
-    print(ll)
+    print('LL before remove():')
+    print(my_linked_list)
 
-    ll.prepend(5)
-    print(ll)
+    print('\nRemoved node:')
+    print(my_linked_list.remove(2).value)
+    print('LL after remove() in middle:')
+    print(my_linked_list)
 
-    ll.pop_first()
-    print(ll)
+    print('\nRemoved node:')
+    print(my_linked_list.remove(0).value)
+    print('LL after remove() of first node:')
+    print(my_linked_list)
 
-    print(ll.get(1))
+    print('\nRemoved node:')
+    print(my_linked_list.remove(2).value)
+    print('LL after remove() of last node:')
+    print(my_linked_list)
 
-    ll.set(2, 5)
-    print(ll)
-
-    ll.insert(1, 16)
-    print(ll)
-
-    ll.remove(1)
-    print(ll)
