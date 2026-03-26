@@ -32,9 +32,6 @@ class LinkedList:
         items = items[:-2] + "]"
 
         return items
-    
-    def __repr__(self) -> str:
-        pass
 
     def __len__(self) -> int:
 
@@ -185,18 +182,16 @@ class LinkedList:
     def insert(self, index: int, item: Any):
         """"""
         if index == 0:
-            print("hhmmm2?")
             return self.prepend(item)
         
         if index < 0 or index > self._length:
-            print("hm>")
             return False
         
         if index == self._length:
             return self.append(item)
          
         temp = self.get(index - 1)
-        print(f"teeemp: ", temp.value)
+
         swap = Node(item)
         swap.next = temp.next
         temp.next = swap
