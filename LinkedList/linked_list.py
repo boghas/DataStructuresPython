@@ -223,8 +223,25 @@ class LinkedList:
         self._length -= 1
 
         return node_to_be_removed
+    
+    def reverse(self):
+        if self._length == 0 or self._length == 1:
+            return True
 
+        swap = self.head
+        self.head = self.tail
+        self.tail = swap
 
+        before = None
+        after = swap.next
+
+        for _ in range(self._length):
+            after = swap.next
+            swap.next = before
+            before = swap
+            swap = after
+        
+        return True
 
 if __name__ == "__main__":
     
@@ -234,21 +251,8 @@ if __name__ == "__main__":
     my_linked_list.append(4)
     my_linked_list.append(5)
 
-    print('LL before remove():')
     print(my_linked_list)
-
-    print('\nRemoved node:')
-    print(my_linked_list.remove(2).value)
-    print('LL after remove() in middle:')
-    print(my_linked_list)
-
-    print('\nRemoved node:')
-    print(my_linked_list.remove(0).value)
-    print('LL after remove() of first node:')
-    print(my_linked_list)
-
-    print('\nRemoved node:')
-    print(my_linked_list.remove(2).value)
-    print('LL after remove() of last node:')
+    tail = my_linked_list.reverse()
+    # print(f"tail.value: {tail.value} | tail.next: {tail.next.value}")
     print(my_linked_list)
 
