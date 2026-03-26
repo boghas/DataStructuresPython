@@ -172,7 +172,7 @@ class LinkedList:
         
         return temp
 
-    def set(self, index: int, item: Any):
+    def set_value(self, index: int, item: Any):
         """"""
         if index < 0 or index >= self._length:
             return False
