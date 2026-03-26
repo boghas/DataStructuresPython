@@ -210,8 +210,8 @@ class LinkedList:
         if index == self._length:
             return self.pop()
         
-        node_to_be_removed = self.get(index)
         previous_node = self.get(index - 1)
+        node_to_be_removed = previous_node.next
 
         previous_node.next = node_to_be_removed.next
 
